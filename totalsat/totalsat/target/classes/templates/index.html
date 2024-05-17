@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/icon.png">
+    <link rel="stylesheet" href="style.css">
+    <title>COB MONITOR SAT</title>
+</head>
+
+<body>
+    <main>
+        <!-- titulo cob monitor sat -->
+        <!-- linha -->
+        <div class="linha">
+            <section class="main">
+                <div class="title">
+                    <h1>COB MONITOR SAT</h1>
+                </div>
+
+                <!-- total sat -->
+                <div>
+                    <div>
+                        <!-- BD -->
+                        <div class="num_totalsat" id="totalSatAtivos">
+                            <p>Carregando...</p>
+                        </div>
+                        <p class=total_sat>TOTAL SAT</p>
+                    </div>
+
+                    <div class="sat_status">
+                        <div id="linha_horizontal01"></div>
+                        <div>
+                            <p>SAT STATUS</p>
+                        </div>
+                        <div id="linha_horizontal01"></div>
+                    </div>
+
+                    <div class="container_main">
+                        <div>
+                            <!-- dados do sat a vencer -->
+                            <div class="container001">
+                                <!-- BD -->
+                                <div id="container_vencido">
+                                    <p id="satAVencer">Carregando...</p>
+                                </div>
+                                <button id="btnMostrarTabela01">
+                                    <img class="seta" src="assets/seta.png" alt="botão de seta para baixo">
+                                </button>
+                            </div>
+                            <p id="title_estado">SAT A VENCER</p>
+                            <!-- tabela sat a vencer -->
+                            <div class="tabela_container">
+                                <div class="tabela01" id="minhaTabela01">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <!-- títulos das colunas da tabela -->
+                                                <th>LOJA</th>
+                                                <th>PDV</th>
+                                                <th>SERIE</th>
+                                                <th>U_TRANSM</th>
+                                                <th>U_TRANSM</th>
+                                                <th>U_TRANSM</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- dados da tabela serão carregados dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <!-- dados do sat vencido -->
+                            <div class="container001">
+                                <!-- BD -->
+                                <div id="container_pendente">
+                                    <p id="satVencido">Carregando...</p>
+                                </div>
+                                <button id="btnMostrarTabela02">
+                                    <img class="seta" src="assets/seta.png" alt="botão de seta para baixo">
+                                </button>
+                            </div>
+                            <p id="title_estado">SAT VENCIDO</p>
+                            <!-- tabela sat vencido -->
+                            <div class="tabela_container">
+                                <div class="tabela02" id="minhaTabela02">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>LOJA</th>
+                                                <th>PDV</th>
+                                                <th>SERIE</th>
+                                                <th>U_TRANSM</th>
+                                                <th>U_TRANSM</th>
+                                                <th>U_TRANSM</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- dados da tabela serão carregados dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <!-- dados do pendente transmissão -->
+                            <div class="container001">
+                                <!-- BD -->
+                                <div id="container_pendente">
+                                    <p id="pendenteTransmissao">Carregando...</p>
+                                </div>
+                                <button id="btnMostrarTabela03">
+                                    <img class="seta" src="assets/seta.png" alt="botão de seta para baixo">
+                                </button>
+                            </div>
+                            <p id="title_estado">PENDENTE TRANSMISSÃO</p>
+                            <div class="tabela_container">
+                                <div class="tabela03" id="minhaTabela03">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>LOJA</th>
+                                                <th>PDV</th>
+                                                <th>SERIE</th>
+                                                <th>U_TRANSM</th>
+                                                <th>U_TRANSM</th>
+                                                <th>U_TRANSM</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- dados da tabela serão carregados dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>
+        // Função para fazer requisição AJAX
+        function carregarDados() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/dadosSat", true); // Substitua '/dadosSat' pelo endpoint da sua API
+            xhr.onload = function () {
+                if (this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    document.getElementById("totalSatAtivos").innerHTML = "<p>" + response.total_ativos + "</p>";
+                    document.getElementById("satAVencer").innerHTML = "<p>" + response.vencendo_proximos_meses + "</p>";
+                    document.getElementById("satVencido").innerHTML = "<p>" + response.certificados_vencidos + "</p>";
+                    document.getElementById("pendenteTransmissao").innerHTML = "<p>" + response.pendente_transmissão + "</p>";
+                } else {
+                    console.error("Erro ao carregar dados: " + this.status);
+                }
+            };
+            xhr.onerror = function () {
+                console.error("Erro na requisição AJAX");
+            };
+            xhr.send();
+        }
+
+        // Carrega os dados ao carregar a página
+        carregarDados();
+
+        // Código para mostrar/ocultar tabelas - sem alterações
+        document.getElementById("btnMostrarTabela01").addEventListener("click", function () {
+            var tabela = document.getElementById("minhaTabela01");
+            var seta = document.querySelector("#btnMostrarTabela01 img.seta");
+
+            if (tabela.style.display === "none") {
+                tabela.style.display = "block";
+                seta.classList.add("virada");
+            } else {
+                tabela.style.display = "none";
+                seta.classList.remove("virada");
+            }
+        });
+        document.getElementById("btnMostrarTabela02").addEventListener("click", function () {
+            var tabela = document.getElementById("minhaTabela02");
+            var seta = document.querySelector("#btnMostrarTabela02 img.seta");
+
+            if (tabela.style.display === "none") {
+                tabela.style.display = "block";
+                seta.classList.add("virada");
+            } else {
+                tabela.style.display = "none";
+                seta.classList.remove("virada");
+            }
+        });
+        document.getElementById("btnMostrarTabela03").addEventListener("click", function () {
+            var tabela = document.getElementById("minhaTabela03");
+            var seta = document.querySelector("#btnMostrarTabela03 img.seta");
+
+            if (tabela.style.display === "none") {
+                tabela.style.display = "block";
+                seta.classList.add("virada");
+            } else {
+                tabela.style.display = "none";
+                seta.classList.remove("virada");
+            }
+        });
+    </script>
+</body>
+
+</html>
